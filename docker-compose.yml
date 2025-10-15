@@ -1,20 +1,20 @@
 services:
   web:
-    image: php:apache
+    image: httpd:latest
     container_name: basic_apache_php
-    
     ports:
-      # Mantiene el mapeo de puerto
-      - "8080:80" 
+    - '8080:80'
+    volumes:
+    - ./html:/usr/local/apache2/htdocs
       
     # 🌟 NUEVO: Pasa la variable de Dokploy al contenedor
     environment:
       # Dokploy sustituirá ${APACHE_SERVER_NAME} por su valor
       APACHE_SERVER_NAME: ${APACHE_SERVER_NAME} 
       
-    volumes:
-      - ./html:/var/www/html
+    # volumes:
+      #- ./html:/var/www/html
       # 🌟 NUEVO: Monta el archivo de configuración en un lugar que Apache lee
-      - ./server-name.conf:/etc/apache2/conf-enabled/server-name.conf
+      # - ./server-name.conf:/etc/apache2/conf-enabled/server-name.conf
       
     restart: unless-stopped
