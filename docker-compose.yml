@@ -6,17 +6,12 @@ services:
     - '8080:80'
     volumes:
     - ./html:/usr/local/apache2/htdocs
-    # 🌟 Mount the custom config file over the main one (or where it's included)
-    - ./httpd-custom.conf:/usr/local/apache2/conf/httpd.conf
-   
-    # 🌟 NUEVO: Pasa la variable de Dokploy al contenedor
+    # 🌟 NEW: Mount server-name.conf over the httpd-vhosts.conf file, 
+    # which is included by the default httpd.conf
+    - ./server-name.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf 
+    
     environment:
-      # Dokploy sustituirá ${APACHE_SERVER_NAME} por su valor
+      # This env var is now optional, as ServerName is hardcoded in the conf file
       APACHE_SERVER_NAME: ${APACHE_SERVER_NAME} 
-      
-    # volumes:
-      #- ./html:/var/www/html
-      # 🌟 NUEVO: Monta el archivo de configuración en un lugar que Apache lee
-      # - ./server-name.conf:/etc/apache2/conf-enabled/server-name.conf
       
     restart: unless-stopped
